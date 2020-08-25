@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Service.Abstractions;
+using Service.BL;
 using Service.RestApi.Models;
 
 namespace Service.RestApi.Controllers.V1
@@ -27,9 +28,19 @@ namespace Service.RestApi.Controllers.V1
         [HttpGet("{absid}")]
         public ActionResult<IncomeModel[]> Get(int absid)
         {
-            return _incomeService.GetClientIncomeTransactions(absid)
-                                .Select(item => new IncomeModel(item))
-                                .ToArray();
+            try
+            {
+                return _incomeService.GetClientIncomeTransactions(absid)
+                                    .Select(item => new IncomeModel(item))
+                                    .ToArray();
+            } catch (ClientNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (ImportNotCompletedException)
+            {
+                return NotFound();
+            }
         }
     }
 }
