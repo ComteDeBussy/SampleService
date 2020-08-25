@@ -9,8 +9,9 @@ namespace Service.ConsoleClient
         {
             try
             {
-            GetAction(args).Do();
-            } catch (Exception ex)
+                GetAction(args).Do();
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
@@ -33,7 +34,7 @@ namespace Service.ConsoleClient
 
             if (string.Compare(args[1], "incomes", true) == 0)
             {
-                if (int.TryParse(args[2], out var absId))
+                if (args.Length == 3 && int.TryParse(args[2], out var absId))
                     return new PrintIncomesAction(new IncomeService(), absId);
             }
 
